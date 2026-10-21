@@ -130,8 +130,17 @@ python tests/smoke.py
 │   ├── SKILL.md
 │   └── settings.fragment.json
 ├── tests/smoke.py
-└── REPORT.md              # 首轮实测报告（成功率、延迟）
+└── PITFALLS.md            # 踩坑记录：编码、DDG 三层坑、代理、Bing 垃圾结果…
 ```
+
+## 踩过的坑
+
+`PITFALLS.md` 记了 7 个，都是"现象 → 根因 → 解法"的形式。几个值得先看的：
+
+- **中文全乱码但英文正常** —— `requests` 对无 charset 的响应默认填 `ISO-8859-1`
+- **DuckDuckGo 三层坑** —— 代理 / UA / 链接解包，缺一层就全挂
+- **`requests` 读不到 Windows 系统代理** —— 它只读环境变量，`urllib` 才读注册表
+- **健康检查通过 ≠ 端点可用** —— `/healthz` 200 但真正的端点 404
 
 ## 依赖
 

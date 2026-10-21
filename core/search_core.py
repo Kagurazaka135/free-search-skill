@@ -550,9 +550,10 @@ def _backend_serpapi(query: str, timeout: float) -> list[dict[str, Any]]:
 
 def _backend_deepseek(query: str, timeout: float) -> list[dict[str, Any]]:
     started = time.monotonic()
-    health_url = "http://127.0.0.1:9999/healthz"
+    base = os.environ.get("FREE_SEARCH_BROKER", "http://127.0.0.1:9999").rstrip("/")
+    api_key = os.environ.get("FREE_SEARCH_BROKER_KEY", "local-broker")
     try:
-        _http_request("GET", health_url, timeout=min(timeout, 5.0))
+        _http_request("GET", base + "/healthz", timeout=min(timeout, 5.0))
     except _BackendFailure:
         _fail("broker_down", "DeepSeek broker health check failed")
     request_timeout = timeout - (time.monotonic() - started)
@@ -561,8 +562,8 @@ def _backend_deepseek(query: str, timeout: float) -> list[dict[str, Any]]:
     body = json.dumps({"query": query, "count": 5}, ensure_ascii=False)
     try:
         _, _, text = _http_request(
-            "POST", "http://127.0.0.1:9999/v1/tools/search",
-            headers={"content-type": "application/json", "x-api-key": "local-broker"},
+            "POST", base + "/v1/tools/search",
+            headers={"content-type": "application/json", "x-api-key": api_key},
             data=body, timeout=request_timeout,
         )
     except _BackendFailure as exc:
