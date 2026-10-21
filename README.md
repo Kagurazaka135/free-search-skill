@@ -37,13 +37,16 @@ exa-mcp   →  bing-html  →  ddg-html  →  serpapi(有额度才用)  →  dee
 
 ```bash
 # 1. 拷到 Claude Code 的 skills 目录
-cp -r . ~/.claude/skills/free-search/
+mkdir -p ~/.claude/skills/free-search
+cp -r core cli skill/SKILL.md skill/settings.fragment.json ~/.claude/skills/free-search/
 
 # 2. 关掉内置 WebSearch（必须手动，skill 自己关不掉）
 #    把 settings.fragment.json 的内容合并进 ~/.claude/settings.json
 
 # 3. 重启 Claude Code
 ```
+
+> Windows 上 `~` 是 `C:\Users\<用户名>`。
 
 `settings.fragment.json` 就三行：
 

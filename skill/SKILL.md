@@ -16,13 +16,13 @@ description: 免费优先的网页搜索，走 Exa 公共 MCP / Bing / DuckDuckG
 ## 怎么用
 
 ```powershell
-python G:\code\free-search\cli\search.py "<查询>"
+python ~/.claude/skills/free-search/cli/search.py "<查询>"
 ```
 
 要结构化数据：
 
 ```powershell
-python G:\code\free-search\cli\search.py "<查询>" --json
+python ~/.claude/skills/free-search/cli/search.py "<查询>" --json
 ```
 
 ### 参数
@@ -78,7 +78,7 @@ exa-mcp   →  bing-html  →  ddg-html  →  serpapi(有额度才用)  →  dee
 2. 问用户代理端口，然后带上参数重试：
 
 ```powershell
-python G:\code\free-search\cli\search.py "<查询>" --proxy http://127.0.0.1:<端口>
+python ~/.claude/skills/free-search/cli/search.py "<查询>" --proxy http://127.0.0.1:<端口>
 ```
 
 3. 如果用户说没有代理，**就接受 ddg-html 不可用**——链会自动降级到下一个后端，不影响整体。
@@ -94,14 +94,20 @@ python G:\code\free-search\cli\search.py "<查询>" --proxy http://127.0.0.1:<�
 
 ## 安装
 
-1. 把整个 `free-search/` 目录拷到 `~/.claude/skills/free-search/`。
-2. 把 `settings.fragment.json` 合并进 `~/.claude/settings.json`：
+```bash
+mkdir -p ~/.claude/skills/free-search
+cp -r core cli skill/SKILL.md skill/settings.fragment.json ~/.claude/skills/free-search/
+```
 
-   ```json
-   { "permissions": { "deny": ["WebSearch"] } }
-   ```
+然后把 `settings.fragment.json` 合并进 `~/.claude/settings.json`：
 
-3. 重启 Claude Code 让配置生效。
+```json
+{ "permissions": { "deny": ["WebSearch"] } }
+```
+
+最后重启 Claude Code。
+
+> Windows 上 `~` 是 `C:\Users\<用户名>`。上面的命令跑不通就用绝对路径。
 
 **为什么不自动关？** Claude Code 的 skill 只能教模型怎么用工具，**不能在运行时禁用 harness 提供的内置工具**。内置 WebSearch 的开关在 `settings.json`，skill 改不了它。所以必须手动合并配置——这不是偷懒，是架构限制。
 
